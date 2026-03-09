@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { UserPlus, RotateCcw, LayoutGrid, Grid3X3, List, Table2 } from "lucide-react"
+import { UserPlus, RotateCcw, LayoutGrid, Grid3X3, List, Table2, ImageIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -10,6 +10,7 @@ import { GridView } from "@/components/vote-counter/grid-view"
 import { CompactView } from "@/components/vote-counter/compact-view"
 import { ListView } from "@/components/vote-counter/list-view"
 import { TableView } from "@/components/vote-counter/table-view"
+import { PosterView } from "@/components/vote-counter/poster-view"
 import type { Candidate, ViewMode } from "@/components/vote-counter/types"
 
 export default function VoteCounter() {
@@ -32,7 +33,7 @@ export default function VoteCounter() {
         setCandidates([])
       }
     }
-    if (savedView && ["grid", "compact", "list", "table"].includes(savedView)) {
+    if (savedView && ["grid", "compact", "list", "table", "poster"].includes(savedView)) {
       setViewMode(savedView as ViewMode)
     }
   }, [])
@@ -113,6 +114,10 @@ export default function VoteCounter() {
     return sorted.findIndex((c) => c.id === candidate.id) + 1
   }
 
+  const updateCandidateImage = (id: string, image: string | null) => {
+    setCandidates(candidates.map((c) => (c.id === id ? { ...c, image: image ?? undefined } : c)))
+  }
+
   const viewProps = {
     candidates,
     leaderId,
@@ -128,6 +133,7 @@ export default function VoteCounter() {
     onRemoveCandidate: removeCandidate,
     getPercentage,
     getRank,
+    onUpdateCandidateImage: updateCandidateImage,
   }
 
   if (!mounted) {
@@ -200,6 +206,10 @@ export default function VoteCounter() {
                     <Table2 className="h-4 w-4" />
                     <span className="hidden sm:inline">Table</span>
                   </ToggleGroupItem>
+                  <ToggleGroupItem value="poster" aria-label="Poster view" className="gap-2 px-4">
+                    <ImageIcon className="h-4 w-4" />
+                    <span className="hidden sm:inline">Poster</span>
+                  </ToggleGroupItem>
                 </ToggleGroup>
               </div>
             </CardContent>
@@ -240,6 +250,7 @@ export default function VoteCounter() {
             {viewMode === "compact" && <CompactView {...viewProps} />}
             {viewMode === "list" && <ListView {...viewProps} />}
             {viewMode === "table" && <TableView {...viewProps} />}
+            {viewMode === "poster" && <PosterView {...viewProps} />}
           </>
         )}
 

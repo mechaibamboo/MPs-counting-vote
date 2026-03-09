@@ -22,11 +22,9 @@ export function ListView({
   getPercentage,
   getRank,
 }: CandidateViewProps) {
-  const sortedCandidates = [...candidates].sort((a, b) => b.votes - a.votes)
-
   return (
     <div className="space-y-3">
-      {sortedCandidates.map((candidate) => {
+      {candidates.map((candidate) => {
         const isLeader = candidate.id === leaderId
         const percentage = getPercentage(candidate.votes)
         const rank = getRank(candidate)

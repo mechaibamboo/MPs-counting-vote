@@ -22,8 +22,6 @@ export function TableView({
   getPercentage,
   getRank,
 }: CandidateViewProps) {
-  const sortedCandidates = [...candidates].sort((a, b) => b.votes - a.votes)
-
   return (
     <Card className="border-2">
       <CardContent className="p-0">
@@ -38,7 +36,7 @@ export function TableView({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedCandidates.map((candidate) => {
+            {candidates.map((candidate) => {
               const isLeader = candidate.id === leaderId
               const percentage = getPercentage(candidate.votes)
               const rank = getRank(candidate)
